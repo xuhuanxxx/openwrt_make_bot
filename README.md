@@ -25,3 +25,10 @@ openwrt_x86_64_bot, official for [official source](https://github.com/openwrt/op
 
 ## download
 replace **xxxyyyzzz** behind **token=** in make.sh with your own token of [tmp.link](https://tmp.link), then get firmware file at workspace page.
+
+## certificate
+- use [mkcert](https://github.com/FiloSottile/mkcert) to sign a cert for lan ip ( default：192.168.2.1 )
+- convert 192.168.2.1.pem to uhttpd.crt
+- convert 192.168.2.1.key.pem to uhttpd.key
+- upload uhttpd.crt and uhttpd.key to /etc
+- import rootCA to your device
