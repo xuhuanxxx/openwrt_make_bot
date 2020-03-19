@@ -28,12 +28,8 @@ fi
 
 git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
 
-#if [ -d "package/luci-app-filetransfer" ]; then
-#		rm -rf "package/luci-app-filetransfer"
-#fi
+sed -i '$a\src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 
-# git clone https://github.com/f8q8/luci-app-filetransfer package/luci-app-filetransfer
-
-# git clone https://github.com/falafalafala1668/OpenWrt-UEFI-Support OpenWrt-UEFI-Support
-# ./OpenWrt-UEFI-Support/RunMe.sh apply
+git clone https://github.com/falafalafala1668/OpenWrt-UEFI-Support OpenWrt-UEFI-Support
+./OpenWrt-UEFI-Support/RunMe.sh apply
 
