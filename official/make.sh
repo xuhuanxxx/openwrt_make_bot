@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# REPO_URL="https://github.com/openwrt/openwrt"
-REPO_URL="https://github.com/coolsnowwolf/lede"
+REPO_URL="https://github.com/openwrt/openwrt"
+# REPO_URL="https://github.com/coolsnowwolf/lede"
 REPO_BRANCH="master"
 EXEC_DIR=$(cd `dirname $0`; pwd)
 SOURCE_DIR="source"
@@ -20,7 +20,7 @@ echo "clean environment"
 
 echo "update environmentc"
 
-sudo -E apt-get update build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+sudo -E apt-get install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
 sudo -E apt-get -y install 
 sudo -E apt-get -y autoremove --purge
 sudo -E apt-get clean
@@ -72,8 +72,8 @@ echo "${NPROC} thread complie"
 make -j${NPROC} V=s
 
 echo "package firmware"
-FILE_NAME="openwrt_lean_`date +%Y%m%d_%H%M`.tar.gz"
-tar --exclude=packages --exclude=*rootfs* -czvf ${FILE_NAME} bin/targets
+FILE_NAME="openwrt_official_`date +%Y%m%d_%H%M`.tar.gz"
+tar --exclude=packages --exclude=*roofs* -czvf ${FILE_NAME} bin/targets
 
 
 if [ ! -d "../${FIRMWARE}" ]; then
