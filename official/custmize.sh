@@ -31,5 +31,11 @@ if [ -d "OpenWrt-UEFI-Support" ]; then
 	rm -rf "OpenWrt-UEFI-Support"
 fi
 
-git clone https://github.com/falafalafala1668/OpenWrt-UEFI-Support OpenWrt-UEFI-Support
-./OpenWrt-UEFI-Support/RunMe.sh apply
+if [ -d "OpenWrt-UEFI-Support" ]; then
+	git pull
+	./OpenWrt-UEFI-Support/RunMe.sh update
+else
+	git clone https://github.com/falafalafala1668/OpenWrt-UEFI-Support OpenWrt-UEFI-Support
+	./OpenWrt-UEFI-Support/RunMe.sh apply
+fi
+
