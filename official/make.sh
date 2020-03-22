@@ -12,14 +12,10 @@ NPROC=1
 
 cd $EXEC_DIR
 
-if [ "$USER"=="root" ];then
-	echo "Switch to a regular account before this job"
-fi
-
 echo "clean environment"
 
 echo "update environmentc"
-
+sudo apt-get update
 sudo -E apt-get install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
 sudo -E apt-get -y install 
 sudo -E apt-get -y autoremove --purge
@@ -38,11 +34,19 @@ else
 	git pull
 fi
 
+rm -rf tmp
+
+echo "update feeds"
+./scripts/feeds update -a
+echo "install feeds"
+./scripts/feeds install -a
+
+
 if [ ! -f "$CONFIG_FILE" ]; then
         echo "first complie, config initial"
 	make defconfig
 else
-	NPROC=$(nproc)
+	# NPROC=$(nproc)
 	echo "make clean"
 	make clean
 fi
@@ -60,20 +64,15 @@ if [  -f "../$CUSTMIZE_SH" ]; then
 	../$CUSTMIZE_SH 
 fi
 
-echo "update feeds"
-./scripts/feeds update -a
-echo "install feeds"
-./scripts/feeds install -a
-
 echo "downloading"
-make download -j4
+make download -j8 V=s
 
 echo "${NPROC} thread complie"
-make -j${NPROC} V=s
+make -j$(nproc) V=s
 
 echo "package firmware"
 FILE_NAME="openwrt_official_`date +%Y%m%d_%H%M`.tar.gz"
-tar --exclude=packages --exclude=*roofs* -czvf ${FILE_NAME} bin/targets
+tar --exclude=packages --exclude=*rootfs* -czvf ${FILE_NAME} bin/targets
 
 
 if [ ! -d "../${FIRMWARE}" ]; then
@@ -84,7 +83,7 @@ mv ${FILE_NAME} ../${FIRMWARE}/${FILE_NAME}
 
 if [  -f "../${FIRMWARE}/${FILE_NAME}" ]; then
 	echo "upload firmware"	
-	curl -k -F "file=@${EXEC_DIR}/${FIRMWARE}/${FILE_NAME}" -F "token=xxxyyyzzz" -F "model=1" -X POST "https://connect.tmp.link/api_v2/cli_uploader"
+	curl -k -F "file=@${EXEC_DIR}/${FIRMWARE}/${FILE_NAME}" -F "token=ro0rct4tph" -F "model=1" -X POST "https://connect.tmp.link/api_v2/cli_uploader"
 else
 	echo "nothing complied, nothing uploaed"
 fi

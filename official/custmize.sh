@@ -15,26 +15,25 @@ sed -i '/HTTP listen addresses/a\        list listen_https       0.0.0.0:443' pa
 sed -i '/redirect_https/s/0/1/g' package/network/services/uhttpd/files/uhttpd.config
 
 if [ -d "package/luci-theme-argon" ]; then
-	        rm -rf "package/luci-theme-argon"
+	git -C package/luci-theme-argon pull
+else 
+	git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 fi
-
-git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
-
 
 if [ -d "package/luci-app-clash" ]; then
-	rm -rf "package/luci-app-clash"
-fi
-
-git clone https://github.com/frainzy1477/luci-app-clash package/luci-app-clash
-
-if [ -d "OpenWrt-UEFI-Support" ]; then
-	rm -rf "OpenWrt-UEFI-Support"
-fi
-
-if [ -d "OpenWrt-UEFI-Support" ]; then
-	git pull
-	./OpenWrt-UEFI-Support/RunMe.sh update
+	git -C package/luci-app-clash pull
 else
+	git clone https://github.com/frainzy1477/luci-app-clash package/luci-app-clash
+fi
+
+if [ -d "OpenWrt-UEFI-Support" ]; then
+	echo "update UEFI"
+	./OpenWrt-UEFI-Support/RunMe.sh restore
+	git -C OpenWrt-UEFI-Support pull
+	./OpenWrt-UEFI-Support/RunMe.sh update
+	./OpenWrt-UEFI-Support/RunMe.sh apply
+else
+	echo "add UEFI"
 	git clone https://github.com/falafalafala1668/OpenWrt-UEFI-Support OpenWrt-UEFI-Support
 	./OpenWrt-UEFI-Support/RunMe.sh apply
 fi
