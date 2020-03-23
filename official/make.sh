@@ -24,14 +24,16 @@ sudo -E apt-get clean
 echo "complie project: ${REPO_URL}, $REPO_BRANCH"
 
 if [ ! -d "$SOURCE_DIR" ]; then
-    echo "create project"
-    git clone --depth 1 $REPO_URL -b $REPO_BRANCH $SOURCE_DIR
-    echo "project created"
+	echo "create project"
+       	git clone --depth 1 $REPO_URL -b $REPO_BRANCH $SOURCE_DIR
+	echo "project created"
 fi
 
 if [ -d "$SOURCE_DIR" ]; then
 	cd $SOURCE_DIR	
-    echo "update project"
+	echo "update project"
+	echo "backup .config"
+	cp $CONFIG_FILE $CONFIG_FILE.old
 	if [ -d "OpenWrt-UEFI-Support" ]; then
 		echo "restore UEFI"
 		./OpenWrt-UEFI-Support/RunMe.sh restore
@@ -46,9 +48,8 @@ echo "update feeds"
 echo "install feeds"
 ./scripts/feeds install -a
 
-
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "first complie, config initial"
+	echo "first complie, config initial"
 	make defconfig
 else
 	# NPROC=$(nproc)
@@ -56,17 +57,19 @@ else
 	make clean
 fi
 
-if [  -f "../$CONFIG_FILE" ]; then
-    echo "replace .config"
-	rm -f $CONFIG_FILE.old
-	mv $CONFIG_FILE $CONFIG_FILE.old
-	cp ../$CONFIG_FILE $CONFIG_FILE 
+if [  -f "../$CUSTMIZE_SH" ]; then
+       	echo "custmize inside setting"
+	chmod +x ../$CUSTMIZE_SH
+	../$CUSTMIZE_SH
 fi
 
-if [  -f "../$CUSTMIZE_SH" ]; then
-    echo "custmize inside setting"
-	chmod +x ../$CUSTMIZE_SH
-	../$CUSTMIZE_SH 
+if [  -f "../$CONFIG_FILE" ]; then
+	# echo "replace .config"
+	# rm -f $CONFIG_FILE.old
+	# mv $CONFIG_FILE $CONFIG_FILE.old
+	cp ../$CONFIG_FILE $CONFIG_FILE
+else
+	cp $CONFIG_FILE.old $CONFIG_FILE
 fi
 
 echo "downloading"
@@ -81,7 +84,7 @@ tar --exclude=packages --exclude=*rootfs* -czvf ${FILE_NAME} bin/targets
 
 
 if [ ! -d "../${FIRMWARE}" ]; then
-    mkdir ../${FIRMWARE}
+	mkdir ../${FIRMWARE}
 fi
 
 mv ${FILE_NAME} ../${FIRMWARE}/${FILE_NAME}

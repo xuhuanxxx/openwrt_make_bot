@@ -9,10 +9,10 @@ sed -i '/zonename/d' package/base-files/files/bin/config_generate
 sed -i "/hostname/a\                set system.@system[-1].zonename='Asia/Shanghai'" package/base-files/files/bin/config_generate
 sed -i "/hostname/a\                set system.@system[-1].timezone='CST-8'" package/base-files/files/bin/config_generate
 
-sed -i '/listen_https/d' package/network/services/uhttpd/files/uhttpd.config
-sed -i '/HTTP listen addresses/a\        list listen_https       [::]:443' package/network/services/uhttpd/files/uhttpd.config
-sed -i '/HTTP listen addresses/a\        list listen_https       0.0.0.0:443' package/network/services/uhttpd/files/uhttpd.config
-sed -i '/redirect_https/s/0/1/g' package/network/services/uhttpd/files/uhttpd.config
+#sed -i '/listen_https/d' package/network/services/uhttpd/files/uhttpd.config
+#sed -i '/HTTP listen addresses/a\        list listen_https       [::]:443' package/network/services/uhttpd/files/uhttpd.config
+#sed -i '/HTTP listen addresses/a\        list listen_https       0.0.0.0:443' package/network/services/uhttpd/files/uhttpd.config
+#sed -i '/redirect_https/s/0/1/g' package/network/services/uhttpd/files/uhttpd.config
 
 if [ -d "package/luci-theme-argon" ]; then
 	git -C package/luci-theme-argon pull
