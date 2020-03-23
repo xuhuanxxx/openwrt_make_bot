@@ -24,13 +24,18 @@ sudo -E apt-get clean
 echo "complie project: ${REPO_URL}, $REPO_BRANCH"
 
 if [ ! -d "$SOURCE_DIR" ]; then
-        echo "create project"
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH $SOURCE_DIR
+    echo "create project"
+    git clone --depth 1 $REPO_URL -b $REPO_BRANCH $SOURCE_DIR
+    echo "project created"
+fi
+
+if [ -d "$SOURCE_DIR" ]; then
 	cd $SOURCE_DIR	
-        echo "project created"
-else
-        echo "update project"
-	cd $SOURCE_DIR
+    echo "update project"
+	if [ -d "OpenWrt-UEFI-Support" ]; then
+		echo "restore UEFI"
+		./OpenWrt-UEFI-Support/RunMe.sh restore
+	fi
 	git pull
 fi
 
@@ -43,7 +48,7 @@ echo "install feeds"
 
 
 if [ ! -f "$CONFIG_FILE" ]; then
-        echo "first complie, config initial"
+    echo "first complie, config initial"
 	make defconfig
 else
 	# NPROC=$(nproc)
@@ -52,14 +57,14 @@ else
 fi
 
 if [  -f "../$CONFIG_FILE" ]; then
-        echo "replace .config"
+    echo "replace .config"
 	rm -f $CONFIG_FILE.old
 	mv $CONFIG_FILE $CONFIG_FILE.old
 	cp ../$CONFIG_FILE $CONFIG_FILE 
 fi
 
 if [  -f "../$CUSTMIZE_SH" ]; then
-        echo "custmize inside setting"
+    echo "custmize inside setting"
 	chmod +x ../$CUSTMIZE_SH
 	../$CUSTMIZE_SH 
 fi
@@ -76,7 +81,7 @@ tar --exclude=packages --exclude=*rootfs* -czvf ${FILE_NAME} bin/targets
 
 
 if [ ! -d "../${FIRMWARE}" ]; then
-        mkdir ../${FIRMWARE}
+    mkdir ../${FIRMWARE}
 fi
 
 mv ${FILE_NAME} ../${FIRMWARE}/${FILE_NAME}

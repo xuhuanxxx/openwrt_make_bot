@@ -28,7 +28,7 @@ fi
 
 if [ -d "OpenWrt-UEFI-Support" ]; then
 	echo "update UEFI"
-	./OpenWrt-UEFI-Support/RunMe.sh restore
+	# ./OpenWrt-UEFI-Support/RunMe.sh restore
 	git -C OpenWrt-UEFI-Support pull
 	./OpenWrt-UEFI-Support/RunMe.sh update
 	./OpenWrt-UEFI-Support/RunMe.sh apply
