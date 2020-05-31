@@ -28,8 +28,9 @@ openwrt_x86_64_bot, official for [official source](https://github.com/openwrt/op
 
 ## certificate
 - use [mkcert](https://github.com/FiloSottile/mkcert) to sign a cert for lan ip ( default：192.168.2.1 )
-- convert 192.168.2.1.pem to uhttpd.crt
-  - openssl x509 -in 192.168.2.1.pem -out uhttpd.crt
+- convert 192.168.2.1.pem to ~~uhttpd.crt~~ uhttpd.der
+  - ~~openssl x509 -in 192.168.2.1.pem -out uhttpd.crt~~
+  - openssl x509 -outform der -in 192.168.2.1.pem -out uhttpd.der
 - convert 192.168.2.1.key.pem to uhttpd.key
   - openssl rsa -in 192.168.2.1-key.pem -out uhttpd.key
 - upload uhttpd.crt and uhttpd.key to /etc
